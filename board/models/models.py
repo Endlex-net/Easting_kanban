@@ -75,11 +75,14 @@ class Department(BaseModel):
     )
     manager = models.ForeignKey(
         Member,
-        verbose_name="负责人"
+        verbose_name="负责人",
+        on_delete=models.PROTECT,
+        related_name="manager_departments"
     )
     members = models.ManyToManyField(
         Member,
         verbose_name="成员",
+        related_name="departments"
     )
     intro = models.CharField('简介', max_length=1024, blank=True)
     superior_id = models.IntegerField(
@@ -196,10 +199,13 @@ class Task(BaseModel):
     manager = models.ForeignKey(
         Member,
         verbose_name="负责人",
+        on_delete=models.PROTECT,
+        related_name="manager_tasks"
     )
     workers = models.ManyToManyField(
         Member,
         verbose_name="执行者",
+        related_name="tasks",
     )
     todo_time = models.DateTimeField(
         "添加至TODO的时间"
