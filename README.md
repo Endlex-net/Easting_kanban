@@ -1,1 +1,1 @@
-# EastWalk_kanban
+# Easting_kanban
