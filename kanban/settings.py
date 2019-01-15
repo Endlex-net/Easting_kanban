@@ -23,6 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'bys$a2omfc8ndi_cim)d6&!vc-4(1z8!8amz@0zmndio($y(nz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -37,8 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',  # DRF
 
+    'rest_framework',
+    'django_filters',
+    'rest_framework_filters',
+
+    'account',
     'board',
 ]
 
@@ -138,9 +143,14 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
+    'PAGE_SIZE': 10,
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+
     'DEFAULT_FILTER_BACKENDS': (
+        'rest_framework.filters.OrderingFilter',
+        'rest_framework.filters.SearchFilter',
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
 }

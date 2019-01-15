@@ -1,31 +1,32 @@
+from django.shortcuts import render
+
+# Create your views here.
 from rest_framework import viewsets, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from board import models, serializers
+from account import models, serializers
 
 
-class TaskViewSet(
+class MemberViewSet(
     mixins.CreateModelMixin,
     mixins.UpdateModelMixin,
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     viewsets.GenericViewSet,
 ):
-    serializer_class = serializers.TaskSerializer
-    queryset = models.Task.objects.filter()
+    serializer_class = serializers.MemberSerializer
+    queryset = models.Member.objects.filter()
     __doc__ = queryset.model._meta.verbose_name
 
 
-class ProjectViewSet(
+class DepartmentViewSet(
     mixins.CreateModelMixin,
     mixins.UpdateModelMixin,
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     viewsets.GenericViewSet,
 ):
-    serializer_class = serializers.ProjectSerializer
-    queryset = models.Project.objects.filter()
+    serializers_class = serializers.MemberSerializer
+    queryset = models.Department.objects.filter()
     __doc__ = queryset.model._meta.verbose_name
-
-
