@@ -1,7 +1,19 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from account import models
 from utils import common_utils
+
+class LoginSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Member
+        read_only_fields = (
+            "id",
+        )
+        fields = read_only_fields
+
+
 
 
 class MemberSerializer(serializers.ModelSerializer):
