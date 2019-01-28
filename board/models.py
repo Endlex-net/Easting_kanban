@@ -11,9 +11,6 @@ from utils import common_utils, django_utils
 from account.models import Member
 
 
-
-
-
 class Project(BaseModel):
     class ProjectStatus(DjangoChoices):
         close = ChoiceItem(0, "关闭")

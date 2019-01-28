@@ -1,31 +1,22 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
 from django.contrib.auth.hashers import check_password
 from djchoices import DjangoChoices, ChoiceItem
 
 from utils.base_models import Abstraction, BaseModel
-from utils import common_utils, django_utils
 
-class Member(BaseModel):
+
+class Member(AbstractUser, BaseModel):
     class Gender(DjangoChoices):
         female = ChoiceItem(0, '女')
         male = ChoiceItem(1, '男')
         unknown = ChoiceItem(2, '未知')
 
-    user = models.OneToOneField(
-        User,
-        on_delete=models.PROTECT,
-        verbose_name="DjangoUser",
-        null=True,
-        blank=True,
-    )
-    username = models.CharField(
-        "用户名",
+    name = models.CharField(
+        "姓名",
         max_length=15,
         blank=True,
-        db_index=True,
     )
-    password = models.CharField("密码", max_length=100, blank=True)
     gender = models.IntegerField(
         '性别',
         default=Gender.unknown,
@@ -45,7 +36,6 @@ class Member(BaseModel):
         blank=True,
         db_index=True,
     )
-
     intro = models.CharField('简介', max_length=1024, blank=True)
     duty = models.CharField('职务', max_length=20, blank=True)
 
@@ -54,14 +44,7 @@ class Member(BaseModel):
         verbose_name = "成员"
 
     def __str__(self):
-        return self.username or self.cellphone_no
-
-    def set_password(self, password):
-        self.password = django_utils.make_hashed_password(password)
-
-    def check_password(self, password):
-        return check_password(common_utils.hash_password(password), self.password)
-
+        return self.name or self.username or self.cellphone_no
 
 
 class Department(BaseModel):

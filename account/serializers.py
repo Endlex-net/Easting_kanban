@@ -1,19 +1,27 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from django.contrib.auth import get_user_model
 
 from account import models
+from django.contrib.auth import authenticate, login, logout
 from utils import common_utils
 
+
 class LoginSerializer(serializers.ModelSerializer):
+    user_profile_model = models.Member
 
     class Meta:
         model = models.Member
-        read_only_fields = (
-            "id",
+        fields = (
+            "username",
+            "password",
         )
-        fields = read_only_fields
 
-
+    def create(self, data):
+        user = self.user_profile_model.objects.create(username=data['username'])
+        user.set_password(data["password"])
+        user.save()
+        return user
 
 
 class MemberSerializer(serializers.ModelSerializer):
