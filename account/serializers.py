@@ -42,6 +42,19 @@ class MemberSerializer(serializers.ModelSerializer):
         )
 
 
+class DepartmentMemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Member
+        read_only_fields = (
+            'id',
+            'name',
+            'intro',
+            'avatar',
+            'open_id',
+        )
+        fields = read_only_fields + ()
+
+
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Department
@@ -53,6 +66,25 @@ class DepartmentSerializer(serializers.ModelSerializer):
             'name',
             'manager',
             'members',
+            'intro',
+            'superior',
+        )
+
+
+class DepartmentReadSerializer(serializers.ModelSerializer):
+    manager = DepartmentMemberSerializer(read_only=True)
+    members = DepartmentMemberSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = models.Department
+        read_only_fields = (
+            'id',
+            'create_time',
+            'manager',
+            'members',
+        )
+        fields = read_only_fields + (
+            'name',
             'intro',
             'superior',
         )

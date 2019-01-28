@@ -50,7 +50,6 @@ class Department(BaseModel):
     name = models.CharField(
         "名称",
         max_length=100,
-        blank=True,
         db_index=True,
     )
     manager = models.ForeignKey(
