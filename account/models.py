@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User, AbstractUser
-from django.contrib.auth.hashers import check_password
 from djchoices import DjangoChoices, ChoiceItem
 
 from utils.base_models import Abstraction, BaseModel
@@ -66,11 +65,6 @@ class Department(BaseModel):
         related_name="departments"
     )
     intro = models.CharField('简介', max_length=1024, blank=True)
-    # superior_id = models.IntegerField(
-    #     verbose_name="上级",
-    #     blank=True,
-    #     db_index=True,
-    # )
     superior = models.ForeignKey(
         'Department',
         verbose_name="上级",

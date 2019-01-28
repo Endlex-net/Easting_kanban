@@ -3,8 +3,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
 from account import models
-from django.contrib.auth import authenticate, login, logout
-from utils import common_utils
+from utils.common_utils import get_uuid
 
 
 class LoginSerializer(serializers.ModelSerializer):
@@ -20,6 +19,7 @@ class LoginSerializer(serializers.ModelSerializer):
     def create(self, data):
         user = self.user_profile_model.objects.create(username=data['username'])
         user.set_password(data["password"])
+        user.open_id = get_uuid(length=20)
         user.save()
         return user
 
