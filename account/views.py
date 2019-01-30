@@ -1,5 +1,4 @@
 import datetime
-from django.shortcuts import render
 
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
@@ -62,6 +61,7 @@ class MemberViewSet(
 
     @action(detail=False, methods=["GET"])
     def myself(self, request):
+        print(request.user)
         serializer = self.get_serializer(request.user)
         return Response(serializer.data)
 
@@ -76,7 +76,6 @@ class DepartmentViewSet(
     serializer_class = serializers.DepartmentSerializer
 
     def get_serializer_class(self):
-        print(self.action)
         if self.action in ['retrieve', 'list']:
             return serializers.DepartmentReadSerializer
         else:

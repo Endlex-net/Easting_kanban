@@ -34,6 +34,7 @@ class MemberSerializer(serializers.ModelSerializer):
         )
         fields = read_only_fields + (
             'username',
+            'name',
             'gender',
             'avatar',
             'cellphone_no',

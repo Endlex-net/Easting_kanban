@@ -24,7 +24,9 @@ class RequestMixin(object):
 class RbacMemberMixin(RequestMixin):
     """Member权限范围控制"""
     def get_queryset(self):
-        user_ids = [self.member.id]
+        print(self.action)
+        user_ids = []
+        user_ids.append(self.member.id)
         queryset = self.queryset.filter(id__in=user_ids)
         return queryset
 
