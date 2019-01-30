@@ -61,7 +61,6 @@ class MemberViewSet(
 
     @action(detail=False, methods=["GET"])
     def myself(self, request):
-        print(request.user)
         serializer = self.get_serializer(request.user)
         return Response(serializer.data)
 
