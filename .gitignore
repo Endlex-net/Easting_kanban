@@ -117,7 +117,7 @@ dmypy.json
 .idea/
 
 #django
-*/migrations/*_initial.py
+*/migrations/*.py
 
 ##front_end
 # dependencies
