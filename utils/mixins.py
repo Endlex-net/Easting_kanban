@@ -38,7 +38,6 @@ class RequestMixin(object):
 class RbacMemberMixin(RequestMixin):
     """Member权限范围控制"""
     def get_queryset(self):
-        # print(self.action)
         if self.action in ['list', 'retrieve']:
             return self.queryset
 
@@ -51,7 +50,6 @@ class RbacMemberMixin(RequestMixin):
 class RbacDepartmentMixin(RequestMixin):
     """Department权限范围控制"""
     def get_queryset(self):
-        print(self.action)
         if self.action in ['list', 'retrieve']:
             return self.member_departments.all()
         return self.manager_departments.all()
