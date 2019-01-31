@@ -7,6 +7,7 @@ from utils.common_utils import get_uuid
 
 
 class LoginSerializer(serializers.ModelSerializer):
+    """登陆注册Serializer"""
     user_profile_model = models.Member
 
     class Meta:
@@ -22,6 +23,57 @@ class LoginSerializer(serializers.ModelSerializer):
         user.open_id = get_uuid(length=20)
         user.save()
         return user
+
+
+class MemberMiniSerializer(serializers.ModelSerializer):
+    """成员MiniSerializer"""
+    class Meta:
+        model = models.Member
+        read_only_fields = (
+            'name',
+            'id',
+            'username',
+            'avatar',
+            'intro',
+        )
+        fields = read_only_fields + ()
+
+
+class DepartmentMiniSerializer(serializers.ModelSerializer):
+    """部门MixinSerializer"""
+    manager = MemberMiniSerializer(read_only=True)
+    class Meta:
+        model = models.Department
+        read_only_fields = (
+            'name',
+            'manager',
+            'intro',
+            'superior',
+        )
+        fields = read_only_fields + ()
+
+
+class MemberSelfSerializer(serializers.ModelSerializer):
+    """我的信息Serializer"""
+    manager_departments = DepartmentMiniSerializer(many=True, read_only=True)
+    class Meta:
+        model = models.Member
+        read_only_fields = (
+            'id',
+            'create_time',
+            'open_id',
+            'manager_departments',
+            'departments',
+        )
+        fields = read_only_fields + (
+            'username',
+            'name',
+            'gender',
+            'avatar',
+            'cellphone_no',
+            'intro',
+            'duty',
+        )
 
 
 class MemberSerializer(serializers.ModelSerializer):
@@ -43,19 +95,6 @@ class MemberSerializer(serializers.ModelSerializer):
         )
 
 
-class DepartmentMemberSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Member
-        read_only_fields = (
-            'id',
-            'name',
-            'intro',
-            'avatar',
-            'open_id',
-        )
-        fields = read_only_fields + ()
-
-
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Department
@@ -73,8 +112,9 @@ class DepartmentSerializer(serializers.ModelSerializer):
 
 
 class DepartmentReadSerializer(serializers.ModelSerializer):
-    manager = DepartmentMemberSerializer(read_only=True)
-    members = DepartmentMemberSerializer(read_only=True, many=True)
+    """部门仅度Serializer"""
+    manager = MemberMiniSerializer(read_only=True)
+    members = MemberMiniSerializer(read_only=True, many=True)
 
     class Meta:
         model = models.Department
@@ -83,9 +123,8 @@ class DepartmentReadSerializer(serializers.ModelSerializer):
             'create_time',
             'manager',
             'members',
-        )
-        fields = read_only_fields + (
             'name',
             'intro',
             'superior',
         )
+        fields = read_only_fields + ()

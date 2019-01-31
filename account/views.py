@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from account import models, serializers
-from utils.mixins import RbacMemberMixin
+from utils.mixins import RequestMixin, RbacMemberMixin, RbacDepartmentMixin
 
 
 class AuthViewSet(viewsets.GenericViewSet,
@@ -48,10 +48,23 @@ class AuthViewSet(viewsets.GenericViewSet,
         return Response(status=status.HTTP_200_OK)
 
 
+class MemberSelfViewSet(
+    RequestMixin,
+    mixins.UpdateModelMixin,
+    mixins.RetrieveModelMixin,
+    viewsets.GenericViewSet,
+):
+    serializer_class = serializers.MemberSelfSerializer
+    queryset = models.Member.objects.filter()
+    __doc__ = "个人信息 (id填0)"
+
+    def get_object(self):
+        return self.queryset.filter(id=self.member.id).first()
+
+
 class MemberViewSet(
     RbacMemberMixin,
     mixins.UpdateModelMixin,
-    mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     viewsets.GenericViewSet,
 ):
@@ -59,13 +72,9 @@ class MemberViewSet(
     queryset = models.Member.objects.filter()
     __doc__ = queryset.model._meta.verbose_name
 
-    @action(detail=False, methods=["GET"])
-    def myself(self, request):
-        serializer = self.get_serializer(request.user)
-        return Response(serializer.data)
-
 
 class DepartmentViewSet(
+    RbacDepartmentMixin,
     mixins.CreateModelMixin,
     mixins.UpdateModelMixin,
     mixins.ListModelMixin,
